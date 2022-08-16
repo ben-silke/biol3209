@@ -4,7 +4,7 @@ import pytest
 
 from click.testing import CliRunner
 
-from myproject.cli import demo_echo, demo_log
+from genetifinder.cli import demo_echo, demo_log
 
 
 DATADIR = Path(__file__).parent / "data"
