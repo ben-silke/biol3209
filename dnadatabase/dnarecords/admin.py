@@ -10,4 +10,4 @@ admin.register(dna_records.Feature)
 admin.register(dna_records.Database)
 admin.register(dna_records.GenbankRecord)
 admin.register(dna_records.EnsemblRecord)
-admin.site.site_header = 'DNA Records'
+admin.site.site_header = "DNA Records"

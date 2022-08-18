@@ -8,79 +8,111 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Database',
+            name="Database",
             fields=[
-                ('uuid', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=255, null=True)),
-                ('description', models.TextField(null=True)),
-                ('url', models.URLField(null=True)),
+                ("uuid", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=255, null=True)),
+                ("description", models.TextField(null=True)),
+                ("url", models.URLField(null=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Sequence',
+            name="Sequence",
             fields=[
-                ('uuid', models.AutoField(primary_key=True, serialize=False)),
-                ('sequence', models.TextField(null=True)),
-                ('accession', models.CharField(max_length=50, null=True)),
-                ('organism', models.CharField(max_length=50, null=True)),
-                ('description', models.CharField(max_length=50, null=True)),
-                ('gene', models.CharField(max_length=50, null=True)),
-                ('relations', models.JSONField(null=True)),
+                ("uuid", models.AutoField(primary_key=True, serialize=False)),
+                ("sequence", models.TextField(null=True)),
+                ("accession", models.CharField(max_length=50, null=True)),
+                ("organism", models.CharField(max_length=50, null=True)),
+                ("description", models.CharField(max_length=50, null=True)),
+                ("gene", models.CharField(max_length=50, null=True)),
+                ("relations", models.JSONField(null=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='EnsemblRecord',
+            name="EnsemblRecord",
             fields=[
-                ('sequence_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='dnarecords.sequence')),
+                (
+                    "sequence_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="dnarecords.sequence",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('dnarecords.sequence',),
+            bases=("dnarecords.sequence",),
         ),
         migrations.CreateModel(
-            name='GenbankRecord',
+            name="GenbankRecord",
             fields=[
-                ('sequence_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='dnarecords.sequence')),
+                (
+                    "sequence_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="dnarecords.sequence",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('dnarecords.sequence',),
+            bases=("dnarecords.sequence",),
         ),
         migrations.CreateModel(
-            name='Feature',
+            name="Feature",
             fields=[
-                ('uuid', models.AutoField(primary_key=True, serialize=False)),
-                ('type', models.CharField(max_length=50, null=True)),
-                ('location', models.CharField(max_length=50, null=True)),
-                ('sequence', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='dnarecords.sequence')),
+                ("uuid", models.AutoField(primary_key=True, serialize=False)),
+                ("type", models.CharField(max_length=50, null=True)),
+                ("location", models.CharField(max_length=50, null=True)),
+                (
+                    "sequence",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="dnarecords.sequence",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='DatabaseReference',
+            name="DatabaseReference",
             fields=[
-                ('uuid', models.AutoField(primary_key=True, serialize=False)),
-                ('db_xref', models.CharField(max_length=50, null=True)),
-                ('database', models.ManyToManyField(to='dnarecords.Database')),
-                ('feature', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='dnarecords.feature')),
+                ("uuid", models.AutoField(primary_key=True, serialize=False)),
+                ("db_xref", models.CharField(max_length=50, null=True)),
+                ("database", models.ManyToManyField(to="dnarecords.Database")),
+                (
+                    "feature",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="dnarecords.feature",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

@@ -8,6 +8,7 @@ from django.views.generic import TemplateView, ListView
 
 from . import models
 
+
 def index(request):
     return HttpResponse("Hello, world. You're at the dnarecords index.")
 
