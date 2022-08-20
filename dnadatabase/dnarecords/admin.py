@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from . import models as dna_records
 
+
 # Register your models here.
 
 admin.register(dna_records.DatabaseReference)

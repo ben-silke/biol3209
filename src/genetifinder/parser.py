@@ -1,6 +1,7 @@
 import os
-from parsers.genbank_parser import GenbankParser
+
 from cogent3.parse.genbank import MinimalGenbankParser, RichGenbankParser
+from parsers.genbank_parser import GenbankParser
 
 
 os.chdir("/Users/bensilke/gavins-lab/biol3209/")

@@ -1,6 +1,6 @@
 from django.urls import include, path
-
 from dnarecords import views
+
 
 urlpatterns = [
     path("", views.index, name="index"),

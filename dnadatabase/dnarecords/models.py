@@ -41,11 +41,11 @@ class Sequence(concept):
     locus = models.TextField(null=True)
     accession = models.CharField(null=True, max_length=50)
     version = models.CharField(null=True, max_length=50)
-    mol_type = models.Choices(("DNA"), ("RNA"))
+    mol_type = models.CharField(null=True, max_length=50)
     sequence = models.TextField(null=True, help_text="The nt's of the sequence")
     organism = models.CharField(null=True, max_length=50)
-
-    description = models.TextField(null=True)
+    length = models.IntegerField(null=True)
+    definition = models.TextField(null=True)
     gene = models.CharField(null=True, max_length=50)
 
     other = models.JSONField(
@@ -71,9 +71,17 @@ class Sequence(concept):
 
 class Feature(concept):
     type = models.CharField(null=True, max_length=50)
-    location = models.CharField(max_length=50, null=True)
+    raw_location = models.CharField(max_length=50, null=True)
+
+    start_location = models.IntegerField(null=True)
+    end_location = models.IntegerField(null=True)
     # if you delete a sequence the features will all be deleted
     sequence = models.ForeignKey(Sequence, on_delete=models.CASCADE)
+
+    other_data = models.JSONField(
+        null=True,
+        help_text="Other information about the feature. Information which does not fit into the above categories. properties of features may not be consistent across features so this area will contain the general information.",
+    )
 
     @property
     def database_reference_set(self):
@@ -81,8 +89,11 @@ class Feature(concept):
 
 
 class DatabaseReference(concept):
-    database = models.ManyToManyField(Database)
+    database = models.ForeignKey(Database, on_delete=models.CASCADE, null=True)
     db_xref = models.CharField(null=True, max_length=50)
+    text = models.CharField(
+        null=True, max_length=50, help_text="Original text of the reference"
+    )
 
 
 class DatabaseFeatureReference(DatabaseReference):
