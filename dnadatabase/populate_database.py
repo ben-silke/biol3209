@@ -1,12 +1,12 @@
-import django
-
-django.setup()
 import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
+import django
+django.setup()
+
 import csv
 import click
 
 from cogent3.parse.genbank import MinimalGenbankParser
-from dnarecords.model_utils import concept
 from dnarecords.models import (
     Database,
     DatabaseFeatureReference,
@@ -42,14 +42,15 @@ from dnarecords.models import (
 )
 
 def main(d, create=False, test=False, fail_file=None):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 
+    print(d)
     if d:
         files = [
             os.path.join(d, f)
             for f in os.listdir(d)
             if os.path.isfile(os.path.join(d, f))
         ]
+        # print(files)
 
     else:
         print(
@@ -90,10 +91,15 @@ def main(d, create=False, test=False, fail_file=None):
 def run(files):
     genes = []
     for file in files:
-        with open(file) as f:
-            parser = MinimalGenbankParser(f)
-            for p in parser:
-                genes.append(p)
+        try:
+            print(f"Parsing {file}")
+            with open(file) as f:
+                parser = MinimalGenbankParser(f)
+                for p in parser:
+                    genes.append(p)
+        except:
+            print(f"Failed to parse {file}")
+            continue
     print(type(genes))
     print(type(genes[0]))
     return genes
