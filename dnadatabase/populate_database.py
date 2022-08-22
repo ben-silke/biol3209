@@ -42,14 +42,19 @@ from dnarecords.models import (
 )
 
 def main(d, create=False, test=False, fail_file=None):
+    import django
+
+    django.setup()
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 
     if d:
+
         files = [
             os.path.join(d, f)
             for f in os.listdir(d)
             if os.path.isfile(os.path.join(d, f))
         ]
+        print(files)
 
     else:
         print(
