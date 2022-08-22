@@ -1,6 +1,9 @@
+# Need these four lines before the start of any script
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 import django
-
 django.setup()
+
 import os
 import csv
 import click
