@@ -13,6 +13,14 @@ class Database(concept):
         null=True,
     )
 
+    @property
+    def db_features(self):
+        return DatabaseFeatureReference.objects.filter(database=self)
+
+    @property
+    def db_sequences(self):
+        return DatabaseSequenceReference.objects.filter(database=self)
+
 
 class Environment(concept):
     name = models.CharField(null=True, max_length=255)
