@@ -49,3 +49,7 @@ class DatabaseListView(ListView):
 class TaxonomyListView(ListView):
     template_name = "dnarecords/taxonomy_list.html"
     model = models.Taxonomy
+
+class EnvironmentListView(ListView):
+    template_name = 'dnarecords/environment_list.html'
+    model = models.Environment

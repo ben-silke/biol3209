@@ -1,3 +1,4 @@
+from uuid import uuid4
 from django.db import models
 
 from .model_utils import concept
@@ -50,7 +51,7 @@ class Sequence(concept):
     accession = models.CharField(null=True, max_length=50)
     version = models.CharField(null=True, max_length=50)
     mol_type = models.CharField(null=True, max_length=50)
-    sequence = models.TextField(null=True, help_text="The nt's of the sequence")
+    # sequence = models.TextField(null=True, help_text="The nt's of the sequence")
     organism = models.CharField(null=True, max_length=50)
     length = models.IntegerField(null=True)
     definition = models.TextField(null=True)
@@ -75,6 +76,10 @@ class Sequence(concept):
     @property
     def homology_relation_set(self):
         return SequenceHomology.objects.filter(base_sequence=self)
+
+    def __str__(self) -> str:
+        references = [f'{reference.database.name}:{reference.db_xref}' for reference in self.database_reference]
+        return f'ACC: {self.accession}. Ref:{references}. Features Count: {self.feature_set.count()}.'
 
 
 class Feature(concept):
@@ -113,8 +118,10 @@ class DatabaseSequenceReference(DatabaseReference):
 
 
 class SequenceHomology(models.Model):
-    id = models.UUIDField(primary_key=True)
-    description = models.CharField(null=True, max_length=50)
+    uuid = models.UUIDField(default=uuid4())
+    id = models.AutoField(primary_key=True)
+
+    description = models.TextField(null=True)
     type = models.CharField(null=True, max_length=50)
 
     base_sequence = models.OneToOneField(
@@ -122,6 +129,18 @@ class SequenceHomology(models.Model):
     )
     relation_sequence = models.ForeignKey(
         Sequence, related_name="related_sequences", on_delete=models.CASCADE
+    )
+
+class FeatureHomology(models.Model):
+    id = models.AutoField(primary_key=True)
+
+    description = models.TextField(null=True)
+
+    base_feature = models.OneToOneField(
+        Feature, related_name="base_feature", on_delete=models.CASCADE
+    )
+    relation_feature = models.ForeignKey(
+        Feature, related_name="related_feature", on_delete=models.CASCADE
     )
 
 

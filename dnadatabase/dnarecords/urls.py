@@ -9,5 +9,6 @@ urlpatterns = [
     path("api/", include("dnarecords.api.urls")),
     path("stats/", views.SequenceStatisticView.as_view(), name="summary_stats"),
     path("databases/", views.DatabaseListView.as_view(), name="database_list"),
-    path("taxonomy_list/", views.TaxonomyListView.as_view(), name="taxonomy_list"),
+    path("taxonomys/", views.TaxonomyListView.as_view(), name="taxonomy_list"),
+    path('environments/', views.EnvironmentListView.as_view(), name='environment_list')
 ]

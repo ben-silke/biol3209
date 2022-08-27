@@ -1,0 +1,8 @@
+<h1>Enviroment - Total Count {{object_list.count}}</h1>
+<ul>
+{% for env in object_list %}
+    <li>{{ env.name }} - Sequences {{env.db_sequences.count}}  </li>
+{% empty %}
+    <li>No databases yet.</li>
+{% endfor %}
+</ul>

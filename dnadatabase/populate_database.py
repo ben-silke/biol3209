@@ -55,10 +55,11 @@ def main(d, create=False, test=False, fail_file=None, environment=None):
 
     if environment:
         # name, description = user_input_name_and_description('environment')
-        environment = Environment.objects.create(
-            name="Mouse Gut",
-            description="Data from mouse gut biome - sourced from https://github.com/BenBeresfordJones/MGBC",
-        )
+        # environment = Environment.objects.create(
+        #     name="Mouse Gut",
+        #     description="Data from mouse gut biome - sourced from https://github.com/BenBeresfordJones/MGBC",
+        # )
+        pass
 
     print(d)
     if d:
@@ -71,7 +72,7 @@ def main(d, create=False, test=False, fail_file=None, environment=None):
 
     else:
         print(
-            "Please provide a directory of genbank files. Test mode will run a single entry."
+            "Please provide a directory of GenBank files. Test mode will run a single entry."
         )
         test = True
 
