@@ -52,13 +52,11 @@ from dnarecords.models import (
     help="Flag to prompt the inclusion of an environment.",
 )
 def main(d, create=False, test=False, fail_file=None, environment=None):
-
     if environment:
         # name, description = user_input_name_and_description('environment')
-        # environment = Environment.objects.create(
-        #     name="Mouse Gut",
-        #     description="Data from mouse gut biome - sourced from https://github.com/BenBeresfordJones/MGBC",
-        # )
+        environment = Environment.objects.create(
+            name="Soil Microbiome",
+        )
         pass
 
     print(d)
@@ -178,7 +176,7 @@ def create_database_objects(genes, environment):
             "accession": gene.pop("accession", None),
             "version": gene.pop("version", None),
             "mol_type": gene.pop("mol_type", None),
-            "sequence": gene.pop("sequence", None),
+            # "sequence": gene.pop("sequence", None),
             "organism": gene.pop("organism", None),
             "definition": gene.pop("definition", None),
             "gene": gene.pop("gene", None),
@@ -248,27 +246,27 @@ def create_database_objects(genes, environment):
                     "raw_location": raw_location,
                     "other_data": feature,
                 }
-                if raw_location:
-                    try:
-                        raw_location = raw_location[0]
-                        raw_location = raw_location.replace(">", "").replace("<", "")
-                        if "complement" in raw_location:
-                            raw_location = raw_location.replace(
-                                "complement(", ""
-                            ).replace(")", "")
-                        locations = raw_location.split("..")
-                        start_location = int(locations[0])
-                        end_location = int(locations[1])
-                        data.update(
-                            {
-                                "start_location": start_location,
-                                "end_location": end_location,
-                            }
-                        )
-                    except Exception as e:
-                        print(
-                            f"No location added. {e}. Error found with {raw_location}"
-                        )
+                # if raw_location:
+                #     try:
+                #         raw_location = raw_location[0]
+                #         raw_location = raw_location.replace(">", "").replace("<", "")
+                #         if "complement" in raw_location:
+                #             raw_location = raw_location.replace(
+                #                 "complement(", ""
+                #             ).replace(")", "")
+                #         locations = raw_location.split("..")
+                #         start_location = int(locations[0])
+                #         end_location = int(locations[1])
+                #         data.update(
+                #             {
+                #                 "start_location": start_location,
+                #                 "end_location": end_location,
+                #             }
+                #         )
+                #     except Exception as e:
+                #         print(
+                #             f"No location added. {e}. Error found with {raw_location}"
+                #         )
 
                 feature_object = Feature.objects.create(sequence=sequence, **data)
                 for db_ref in db_xrefs:
@@ -311,6 +309,8 @@ def create_database_objects(genes, environment):
             print(f'Environment creation failed for {gene["accession"]}')
             continue
 
+        if failures[accession] == []:
+            failures.pop(accession)
     return failures
 
 

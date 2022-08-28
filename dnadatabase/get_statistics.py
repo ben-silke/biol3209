@@ -24,9 +24,8 @@ from dnarecords.models import (
 def main():
     print("Running get_statistics.py")
 
-    get_references('InterPro')
+    # get_references('InterPro')
     # get_references('UniProtKB/Swiss-Prot')
-
 
 def get_references(db_name):
     print(f'Getting reference data for {db_name=}')
@@ -80,6 +79,7 @@ def query_swiss_prot(db_xref):
     for reference in references:
         # reference.
         pass
+
 
 if __name__ == "__main__":
     main()
