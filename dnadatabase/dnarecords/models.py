@@ -108,7 +108,6 @@ class DatabaseReference(concept):
         null=True, max_length=50, help_text="Original text of the reference"
     )
 
-
 class DatabaseFeatureReference(DatabaseReference):
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, null=True)
 
