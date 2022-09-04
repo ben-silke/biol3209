@@ -1,9 +1,15 @@
+import datetime
 import os
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 import django
+
+
 django.setup()
 
 import csv
+
 import click
 
 from cogent3.parse.genbank import MinimalGenbankParser
@@ -34,14 +40,24 @@ from dnarecords.models import (
     default=False,
     is_flag=True,
 )
-
 @click.option(
     "--fail_file",
-    '--ff',
+    "--ff",
     help="File to write failed entries to.",
 )
-
-def main(d, create=False, test=False, fail_file=None):
+@click.option(
+    "--environment",
+    "--e",
+    is_flag=True,
+    help="Flag to prompt the inclusion of an environment.",
+)
+def main(d, create=False, test=False, fail_file=None, environment=None):
+    if environment:
+        # name, description = user_input_name_and_description('environment')
+        environment = Environment.objects.create(
+            name="Soil Microbiome",
+        )
+        pass
 
     print(d)
     if d:
@@ -54,16 +70,27 @@ def main(d, create=False, test=False, fail_file=None):
 
     else:
         print(
-            "Please provide a directory of genbank files. Test mode will run a single entry."
+            "Please provide a directory of GenBank files. Test mode will run a single entry."
         )
         test = True
 
+    failures = []
     if test:
         # change this
-        os.chdir("/Users/bensilke/gavins-lab/biol3209/")
-        files = ["data/soil_reference_genomes/NC_000913.3.gb"]
+        for file in files:
+            try:
+                genes = run_file(file)
+                fails = create_database_objects(genes, environment)
+                failures.extend(fails)
+                print(
+                    f"Successfully created sequence and features for {file} at {datetime.datetime.now()}"
+                )
+                print(f"fails {fails=} at {datetime.datetime.now()}")
+            except Exception as e:
+                print(f"Failed to parse {file} + {e} + {datetime.datetime.now()}")
 
-    failures = {}
+        create = False
+
     if create:
         genes = run(files)
         failures = create_database_objects(genes)
@@ -88,6 +115,20 @@ def main(d, create=False, test=False, fail_file=None):
                 writer.writerows(failures)
 
 
+def run_file(file):
+    genes = []
+    try:
+        print(f"Parsing {file}")
+        with open(file) as f:
+            parser = MinimalGenbankParser(f)
+            for p in parser:
+                genes.append(p)
+    except:
+        print(f"Failed to parse {file}")
+        return None
+    return genes
+
+
 def run(files):
     genes = []
     for file in files:
@@ -105,18 +146,14 @@ def run(files):
     return genes
 
 
-def create_database_objects(genes):
-    environment = Environment.objects.create(
-        name="Soil",
-        description="Soil Microbiome: https://pubmed.ncbi.nlm.nih.gov/27935589/",
-    )
+def create_database_objects(genes, environment):
 
     failures = {}
 
     for i, gene in enumerate(genes):
-        accession = gene['accession']
+        accession = gene["accession"]
         failures[accession] = []
-        print(f'{i=} and {gene["accession"]=}')
+        print(f'{i=} and {gene["accession"]=} + {datetime.datetime.now()=}')
         # For feature creation
         features = gene.pop("features", [])
 
@@ -139,7 +176,7 @@ def create_database_objects(genes):
             "accession": gene.pop("accession", None),
             "version": gene.pop("version", None),
             "mol_type": gene.pop("mol_type", None),
-            "sequence": gene.pop("sequence", None),
+            # "sequence": gene.pop("sequence", None),
             "organism": gene.pop("organism", None),
             "definition": gene.pop("definition", None),
             "gene": gene.pop("gene", None),
@@ -157,7 +194,7 @@ def create_database_objects(genes):
             sequence = Sequence.objects.create(**data)
             sequence.save()
         except:
-            failures[accession].append('Sequence creation failed.')
+            failures[accession].append("Sequence creation failed.")
             print(f'Sequence creation failed for {gene["accession"]}')
             continue
 
@@ -190,13 +227,13 @@ def create_database_objects(genes):
                 )
         except:
             print(f'Database creation failed for {gene["accession"]}')
-            failures[accession].append('Database creation failed.')
+            failures[accession].append("Database creation failed.")
             continue
 
         # Create features
         for feature in features:
             try:
-                 # Create database references (need to create database)
+                # Create database references (need to create database)
                 # Remove location because it is a cogent3 object and I dont want to deal with it
                 feature.pop("location", None)
 
@@ -209,24 +246,27 @@ def create_database_objects(genes):
                     "raw_location": raw_location,
                     "other_data": feature,
                 }
-                if raw_location:
-                    try:
-                        raw_location = raw_location[0]
-                        if "complement" in raw_location:
-                            raw_location = raw_location.replace("complement(", "").replace(
-                                ")", ""
-                            )
-                        locations = raw_location.split("..")
-                        start_location = int(locations[0])
-                        end_location = int(locations[1])
-                        data.update(
-                            {
-                                "start_location": start_location,
-                                "end_location": end_location,
-                            }
-                        )
-                    except Exception as e:
-                        print(f"No location added. {e}. Error found with {raw_location}")
+                # if raw_location:
+                #     try:
+                #         raw_location = raw_location[0]
+                #         raw_location = raw_location.replace(">", "").replace("<", "")
+                #         if "complement" in raw_location:
+                #             raw_location = raw_location.replace(
+                #                 "complement(", ""
+                #             ).replace(")", "")
+                #         locations = raw_location.split("..")
+                #         start_location = int(locations[0])
+                #         end_location = int(locations[1])
+                #         data.update(
+                #             {
+                #                 "start_location": start_location,
+                #                 "end_location": end_location,
+                #             }
+                #         )
+                #     except Exception as e:
+                #         print(
+                #             f"No location added. {e}. Error found with {raw_location}"
+                #         )
 
                 feature_object = Feature.objects.create(sequence=sequence, **data)
                 for db_ref in db_xrefs:
@@ -242,7 +282,7 @@ def create_database_objects(genes):
                         text=db_ref,
                     )
             except Exception as e:
-                failures[accession].append(f'Feature {data} creation failed.')
+                failures[accession].append(f"Feature {data} creation failed.")
                 continue
 
         # create and add taxonomy
@@ -256,8 +296,8 @@ def create_database_objects(genes):
                     taxonomy_object = Taxonomy.objects.create(name=tax)
                 sequence.taxonomy.add(taxonomy_object)
             except:
-                failures[accession].append(f'Taxonomy {tax} creation failed.')
-                print(f'Taxonomy {tax} creation failed.')
+                failures[accession].append(f"Taxonomy {tax} creation failed.")
+                print(f"Taxonomy {tax} creation failed.")
                 continue
 
         # Create environment
@@ -265,11 +305,34 @@ def create_database_objects(genes):
             sequence.environment.add(environment)
             sequence.save()
         except:
-            failures[accession].append('Environment creation failed.')
+            failures[accession].append("Environment creation failed.")
             print(f'Environment creation failed for {gene["accession"]}')
             continue
 
+        if failures[accession] == []:
+            failures.pop(accession)
     return failures
+
+
+def user_input_name_and_description(object_name, name=None, description=None):
+    if name and description:
+        return name, description
+
+    print(f"Please enter a name for the {object_name}.")
+    name = input()
+    print(f"are you happy with {name=} (y/n)")
+    y = input()
+    if y == "y" or y == "Y":
+        print(f"please enter a description for the {object_name}")
+        description = input()
+        print(f"are you happy with {description=} (y/n)")
+        y = input()
+        if y != "y" or y != "Y":
+            description = None
+        return name, description
+    else:
+        return user_input_name_and_description(object_name)
+
 
 if __name__ == "__main__":
     main()

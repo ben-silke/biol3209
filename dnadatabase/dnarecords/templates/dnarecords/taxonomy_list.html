@@ -1,0 +1,8 @@
+<h1>Taxonomy - Total Count: {{object_list.count}}</h1>
+<ul>
+{% for taxon in object_list %}
+    <li>{{ taxon.name }} - Count: {{taxon.sequence_set.count}}</li>
+{% empty %}
+    <li>No articles yet.</li>
+{% endfor %}
+</ul>

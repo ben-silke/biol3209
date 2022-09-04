@@ -1,0 +1,8 @@
+<h1>Databases - Total Count {{object_list.count}}</h1>
+<ul>
+{% for database in object_list %}
+    <li>{{ database.name }} - Sequences {{database.db_sequences.count}} -- Features: {{database.db_features.count}}  </li>
+{% empty %}
+    <li>No databases yet.</li>
+{% endfor %}
+</ul>
