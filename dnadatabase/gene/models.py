@@ -18,15 +18,9 @@ class Gene(concept):
     def database_set(self):
         return GeneDatabaseReference.objects.filter(gene=self)
 
-    # def get_odb_cluster_id(self):
-    #     for reference in self.database_set:
-    #         if 'IPR' in reference.db_xref:
-    #             if not self.interpro_id:
-    #                 self.interpro_id = reference.db_xref
-    #         elif 'swiss' in reference.database.name:
-    #             get_interpro_info('entry/interpro/protein/uniprot/', reference.db_xref)
-    #         elif 'GeneId' in reference.database.name:
-    #             get_
+    @property
+    def cds(self):
+        return CDS.objects.filter(gene=self).first()
 
 
 class GeneDatabaseReference(DatabaseReference):
@@ -38,6 +32,10 @@ class CDS(concept):
     name = models.CharField(default="", max_length=256)
     gene = models.ForeignKey(Gene, on_delete=models.CASCADE, null=True)
     other_data = models.JSONField(null=True)
+
+    @property
+    def database_set(self):
+        return CdsDatabaseReference.objects.filter(cds=self)
 
 
 class CdsDatabaseReference(DatabaseReference):
