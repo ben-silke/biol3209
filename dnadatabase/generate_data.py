@@ -1,6 +1,4 @@
-from dataclasses import field
 import os
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 import django
 django.setup()
@@ -11,7 +9,7 @@ print(os.listdir())
 
 folder = 'data/summary_stats'
 
-from gene.models import CDS, Gene
+from gene.models import CDS, Gene, CdsDatabaseReference
 
 # counts_file = folder+'/cds_counts_stats.csv'
 # with open(counts_file, 'w') as f:
@@ -45,32 +43,66 @@ from gene.models import CDS, Gene
 #     for row in counts:
 #         writer.writerow(row)
 
-file = folder+'/database_references.csv'
-with open(file, 'w') as f:
-    rows = []
-    field_names = set()
-    for gene in Gene.objects.all():
-        row = {
-            'name': gene.name
-        }
-        for ref in gene.database_set:
-            row[ref.database.name] = ref.db_xref
-            field_names.add(ref.database.name)
-        if gene.cds:
-            for ref in gene.cds.database_set:
-                row[ref.database.name] = ref.db_xref
-                field_names.add(ref.database.name)
+# file = folder+'/database_references.csv'
+# with open(file, 'w') as f:
+#     rows = []
+#     field_names = set()
+#     for gene in Gene.objects.all():
+#         row = {
+#             'name': gene.name
+#         }
+#         for ref in gene.database_set:
+#             row[ref.database.name] = ref.db_xref
+#             field_names.add(ref.database.name)
+#         if gene.cds:
+#             for ref in gene.cds.database_set:
+#                 row[ref.database.name] = ref.db_xref
+#                 field_names.add(ref.database.name)
 
-        if len(row) > 1:
-            rows.append(row)
+#         if len(row) > 1:
+#             rows.append(row)
 
-    print(field_names)
-    print([name for name in field_names])
-    print(['name'] + [name for name in field_names])
+#     print(field_names)
+#     print([name for name in field_names])
+#     print(['name'] + [name for name in field_names])
 
-    field_names = ['name'] + [name for name in field_names]
-    print(field_names)
-    writer = csv.DictWriter(f, fieldnames=field_names)
-    print(field_names)
-    writer.writeheader()
-    writer.writerows(rows)
+#     field_names = ['name'] + [name for name in field_names]
+#     print(field_names)
+#     writer = csv.DictWriter(f, fieldnames=field_names)
+#     print(field_names)
+#     writer.writeheader()
+#     writer.writerows(rows)
+
+
+# for gene in Gene.objects.all():
+#     print(gene.name)
+#     name = gene.name.replace("[","").replace("]","").replace("\'","")
+#     print(f'{name=}')
+#     gene.name = name
+#     gene.save()
+
+# for gene in CDS.objects.all():
+#     print(gene.name)
+#     name = gene.name.replace("[","").replace("]","").replace("\'","")
+#     print(f'{name=}')
+#     gene.name = name
+#     gene.save()
+
+ls = []
+for i, ref in enumerate(CdsDatabaseReference.objects.filter(database__name='UniProtKB/Swiss-Prot')):
+    cds = ref.cds
+    output = cds.kegg_link()
+    row = [cds.name]
+    if output:
+        if cds.kegg_id:
+            row.append(cds.kegg_id)
+        row.append(output)
+    ls.append(row)
+    print(f'{i}- {cds.name}')
+
+
+counts_file = folder+'/cds_kegg_links.csv'
+with open(counts_file, 'w') as f:
+    writer = csv.writer(f)
+    for l in ls:
+        writer.writerow(l)
