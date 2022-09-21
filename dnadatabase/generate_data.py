@@ -89,20 +89,17 @@ from gene.models import CDS, Gene, CdsDatabaseReference
 #     gene.save()
 
 ls = []
-for i, ref in enumerate(CdsDatabaseReference.objects.filter(database__name='UniProtKB/Swiss-Prot')):
-    cds = ref.cds
-    output = cds.kegg_link()
-    row = [cds.name]
-    if output:
-        if cds.kegg_id:
-            row.append(cds.kegg_id)
-        row.append(output)
-    ls.append(row)
-    print(f'{i}- {cds.name}')
-
-
 counts_file = folder+'/cds_kegg_links.csv'
 with open(counts_file, 'w') as f:
     writer = csv.writer(f)
-    for l in ls:
-        writer.writerow(l)
+    for i, ref in enumerate(CdsDatabaseReference.objects.filter(database__name='UniProtKB/Swiss-Prot')):
+        cds = ref.cds
+        output = cds.kegg_link()
+        row = [cds.name]
+        if output:
+            if cds.kegg_id:
+                row.append(cds.kegg_id)
+            row.append(output)
+        ls.append(row)
+        print(f'{i}- {cds.name}')
+        writer.writerow(row)
