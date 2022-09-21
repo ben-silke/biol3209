@@ -21,7 +21,8 @@ class KeggConnectionMixin:
                 response = requests.get(url)
             except:
                 response = None
-        if response.text == '\n':
+
+        if response and response.text == '\n':
             response = None
             if uniprot := self.database_set.filter(database__name='UniProtKB/Swiss-Prot').first():
                 print(f'{uniprot=} ; {uniprot.db_xref=} ; {uniprot.database.name=}')
@@ -31,7 +32,9 @@ class KeggConnectionMixin:
                     response = requests.get(BASE_KEGG+CONVERT+'uniprot:'+uniprot.db_xref)
                 except:
                     response = None
-        print(f'{response.text=}')
+
+        if response:
+            print(f'{response.text=}')
         if response and response.status_code == 200:
             try:
                 kegg_id = response.text.split('\n')[0].split('\t')[1]
