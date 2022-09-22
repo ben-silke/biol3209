@@ -1,3 +1,6 @@
+
+
+
 #!/bin/bash
 # NC_015733
 ids=(NC_015733)
@@ -10,8 +13,9 @@ do
     echo $fetch_command >> data/input/$id.fasta
     mkdir data/output/$id
 
-    # prodigal_command="$(prodigal -i data/input/$id.fasta -o data/output/$id/$id.coords.gbk -d data/output/$id/$id.mrna.faa -a data/output/$id/$id.protein.faa)"
-    strace -o data/trace_data/$id.txt -c -tt prodigal -i data/input/$id.fasta -o data/output/$id/$id.coords.gbk -d data/output/$id/$id.mrna.faa -a data/output/$id/$id.protein.faa
+    # python3 justOrthologs.py -q data/output/nc_000913.3-mrna.faa -s /Users/bensilke/gavins-lab/biol3209/prodigal/data/output/nc_000963.1-mrna.faa -o output -c -t 16
+
+    strace -o data/trace_data/$id.txt -c -tt ____command_goes_here____
 
     # python script to compare the sequences.
 done

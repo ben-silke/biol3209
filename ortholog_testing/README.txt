@@ -4,5 +4,8 @@ JustOrthologs requires two files as input and it then computes orthology between
 
 python3 justOrthologs.py -q /Users/bensilke/gavins-lab/biol3209/prodigal/data/output/nc_000913.3-mrna.faa -s /Users/bensilke/gavins-lab/biol3209/prodigal/data/output/nc_000963.1-mrna.faa -o output -c -t 16
 
-
 Might be necessary to write a wrapper; or just begin by comparing two sequences with orthologs.
+
+
+What level of assertion should be used here? What measure of correctness.
+It is probably a good idea to test this against the quest for orthologs data.
