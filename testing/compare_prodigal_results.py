@@ -10,7 +10,7 @@
 # read the second file; the output of prodigal or genemark and then see if any of the gene locations match up.
 
 # Check location -> if this location is wrong this is most likely an error.
-# Check transalation for somewhat of a match
+# Check translation for somewhat of a match
 
 
 # what scores should be used? what assertion of success is there?
