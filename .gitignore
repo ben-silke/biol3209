@@ -129,7 +129,12 @@ dmypy.json
 .pyre/
 
 # keep data files local
-data/
+# data/
+*.gb
+
+# Testing data has an important framework of folders
+!testing/data/
+
 
 .DS_Store
 
