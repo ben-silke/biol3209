@@ -131,6 +131,7 @@ dmypy.json
 # keep data files local
 # data/
 *.gb
+data/quest4orthologs
 
 # Testing data has an important framework of folders
 !testing/data/
