@@ -132,6 +132,7 @@ dmypy.json
 # data/
 *.gb
 data/quest4orthologs
+testing/data/input
 
 # Testing data has an important framework of folders
 !testing/data/
