@@ -130,7 +130,7 @@ dmypy.json
 
 # keep data files local
 # data/
-*.gb
+.gb
 
 # Testing data has an important framework of folders
 !testing/data/
