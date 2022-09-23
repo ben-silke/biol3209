@@ -8,6 +8,7 @@ echo ${ids[@]}
 
 # change this depending on the input
 folder=prodigal
+just_ortho_dir=notJustOrthologs/justOrthologs/
 
 for id in "${ids[@]}"
 do
@@ -15,7 +16,7 @@ do
     do
     if ["$id" != "$second"]; then
     # double chekc these labels
-        python3 justOrthologs.py -q data/output/$folder/$id/$id.mrna.faa -s data/output/$folder/$second/$second.mrna.faa -o data/output/justorthologs/orthologs.$id.$second.faa -c -t 16
+        python3 $just_ortho_dir/justOrthologs.py -q data/output/$folder/$id/$id.mrna.faa -s data/output/$folder/$second/$second.mrna.faa -o data/output/justorthologs/orthologs.$id.$second.faa -c -t 16
     fi
     done
     # strace -o data/justorthologs/trace_data/$id.txt -c -tt ____command_goes_here____

@@ -14,7 +14,6 @@ do
     # prodigal_command="$(prodigal -i data/input/$id.fasta -o data/output/$id/$id.coords.gbk -d data/output/$id/$id.mrna.faa -a data/output/$id/$id.protein.faa)"
     # strace -o data/output/prodigal/trace_data/$id.txt -c -tt prodigal -i data/input/$id.fasta -o data/output/prodigal/$id/$id.coords.gbk -d data/output/prodigal/$id/$id.mrna.faa -a data/output/prodigal/$id/$id.protein.faa
     prodigal -i data/input/$id.fasta -o data/output/prodigal/$id/$id.coords.gbk -d data/output/prodigal/$id/$id.mrna.faa -a data/output/prodigal/$id/$id.protein.faa
-    
     # python script to compare the sequences.
 done
 # THis needs to recursively loop
