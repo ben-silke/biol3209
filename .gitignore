@@ -130,7 +130,6 @@ dmypy.json
 
 # keep data files local
 # data/
-*.gb
 data/quest4orthologs
 testing/data/input
 
