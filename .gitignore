@@ -130,6 +130,7 @@ dmypy.json
 
 # keep data files local
 # data/
+data/soil/soil_reference_genomes
 data/quest4orthologs
 testing/data/input
 
