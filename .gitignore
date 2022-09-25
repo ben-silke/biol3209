@@ -128,8 +128,16 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# keep data files local
-data/
+# keep the contents of data fies local but i want the folder framework to remain intact
+# data/
+data/soil/soil_reference_genomes
+data/quest4orthologs
+testing/data/input
+testing/data/output
+
+# genemark 2s produces these files which I do not want to record
+*.out
+
 
 .DS_Store
 
