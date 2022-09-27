@@ -38,14 +38,15 @@ from cogent3.parse.genbank import MinimalGenbankParser
     "--o",
     help="Flag to prompt the inclusion of an environment.",
 )
-def main(d, create=False, test=False, fail_file=None, output=None):
+def main(d, create=False, test=False, fail_file=None, output=''):
     files = [
         os.path.join(d, f)
         for f in os.listdir(d)
         if os.path.isfile(os.path.join(d, f))
     ]
     fails = run(files)
-
+    print('________________FAILS________________________')
+    print(fails)
     file = output+'gene_population_failures.csv'
     with open(file) as f:
         writer = csv.writer()
@@ -56,7 +57,6 @@ def main(d, create=False, test=False, fail_file=None, output=None):
             writer.writerow([k,v])
 
     return fails
-
 
 def parse_file(file):
     genes = []
@@ -78,11 +78,11 @@ def parse_file(file):
 
 def run(files):
     fails = {}
-    for file in files:
+    total = len(files)
+    for i, file in enumerate(files):
+        print(f'attemping to parse {i}/{total} -::- {file}')
         try:
             genes = parse_file(file)
-            print(f'{type(genes[0])=}')
-            print(f'{genes[0].keys()}')
             if genes:
                 fails[str(file)] = create_objects(genes)
         except Exception as e:
@@ -96,15 +96,29 @@ def create_objects(sequences):
     gene = None
     # print(f'{len(genes)}')
     file = sequences[0]
+    locus = file.get('locus', None)
     # for gene in genes:
     if features := file.get('features', None):
         for feature in features:
 
             if 'gene' in feature['type']:
                 gene = feature
-                references = gene.pop('db_xref', [])
+                references = feature.get('db_xref', [])
                 if name := feature.get('gene', None):
                     gene = Gene.objects.create(name=name)
+                    if locus:
+                        gene.locus = locus
+                    if raw_location := feature.get('raw_location'):
+                        gene.raw_location = raw_location
+
+                    if location := feature.get('location', None):
+                        try:
+                            gene.first_base = location.first()
+                            gene.last_base = location.last()
+                        except:
+                            print(f'failed to get first and last base for {cds.name}')
+                    gene.save()
+
                     for reference in references:
                         db_reference = reference.split(':')
                         ref = db_reference[0]
@@ -128,6 +142,17 @@ def create_objects(sequences):
                         cds.protein_id = id
                     if translation := feature.get('translation', None):
                         cds.translation = translation
+                    if locus:
+                        cds.locus = locus
+                    if raw_location := feature.get('raw_location', None):
+                        cds.raw_location = raw_location
+
+                    if location := feature.get('location', None):
+                        try:
+                            gene.first_base = location.first()
+                            gene.last_base = location.last()
+                        except:
+                            print(f'failed to get first and last base for {cds.name}')
                     cds.save()
 
                     for reference in references:

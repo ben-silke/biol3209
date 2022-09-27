@@ -56,6 +56,10 @@ class Gene(concept, KeggConnectionMixin):
     other_data = models.JSONField(null=True)
     kegg_id = models.CharField(null=True, max_length=64)
 
+    locus = models.CharField(null=True, max_length=64)
+    raw_location = models.CharField(null=True, max_length=256)
+    first_base = models.IntegerField(null=True)
+    last_base = models.IntegerField(null=True)
 
     @property
     def database_set(self):
@@ -81,6 +85,7 @@ class GeneDatabaseReference(DatabaseReference):
 
 
 class CDS(concept, KeggConnectionMixin):
+    locus = models.CharField(null=True, max_length=64)
     name = models.CharField(default="", max_length=256)
     gene = models.ForeignKey(Gene, on_delete=models.CASCADE, null=True)
 
@@ -89,7 +94,7 @@ class CDS(concept, KeggConnectionMixin):
     protein_id = models.CharField(null=True, max_length=64)
     translation = models.TextField(null=True, max_length=500)
     kegg_id = models.CharField(null=True, max_length=64)
-
+    raw_location = models.CharField(null=True, max_length=256)
 
     @property
     def database_set(self):
