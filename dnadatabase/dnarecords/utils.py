@@ -36,3 +36,4 @@ def get_interpro_info(query, id):
         return response.json()['results']
     else:
         return response.json()
+

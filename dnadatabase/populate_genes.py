@@ -149,8 +149,8 @@ def create_objects(sequences):
 
                     if location := feature.get('location', None):
                         try:
-                            gene.first_base = location.first()
-                            gene.last_base = location.last()
+                            cds.first_base = location.first()
+                            cds.last_base = location.last()
                         except:
                             print(f'failed to get first and last base for {cds.name}')
                     cds.save()
