@@ -10,32 +10,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dnarecords', '0001_initial'),
+        ("dnarecords", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='sequencehomology',
-            name='uuid',
-            field=models.UUIDField(default=uuid.UUID('4122271b-537b-499a-9395-58068450ee84')),
+            model_name="sequencehomology",
+            name="uuid",
+            field=models.UUIDField(
+                default=uuid.UUID("4122271b-537b-499a-9395-58068450ee84")
+            ),
         ),
         migrations.AlterField(
-            model_name='sequencehomology',
-            name='description',
+            model_name="sequencehomology",
+            name="description",
             field=models.TextField(null=True),
         ),
         migrations.AlterField(
-            model_name='sequencehomology',
-            name='id',
+            model_name="sequencehomology",
+            name="id",
             field=models.AutoField(primary_key=True, serialize=False),
         ),
         migrations.CreateModel(
-            name='FeatureHomology',
+            name="FeatureHomology",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('description', models.TextField(null=True)),
-                ('base_feature', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='base_feature', to='dnarecords.feature')),
-                ('relation_feature', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='related_feature', to='dnarecords.feature')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("description", models.TextField(null=True)),
+                (
+                    "base_feature",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="base_feature",
+                        to="dnarecords.feature",
+                    ),
+                ),
+                (
+                    "relation_feature",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="related_feature",
+                        to="dnarecords.feature",
+                    ),
+                ),
             ],
         ),
     ]

@@ -6,7 +6,6 @@ from . import models as gene
 # Register your models here.
 
 
-
 # Register your models here.
 
 

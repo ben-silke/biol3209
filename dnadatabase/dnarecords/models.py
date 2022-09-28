@@ -79,8 +79,11 @@ class Sequence(concept):
         return SequenceHomology.objects.filter(base_sequence=self)
 
     def __str__(self) -> str:
-        references = [f'{reference.database.name}:{reference.db_xref}' for reference in self.database_reference]
-        return f'ACC: {self.accession}. Ref:{references}. Features Count: {self.feature_set.count()}.'
+        references = [
+            f"{reference.database.name}:{reference.db_xref}"
+            for reference in self.database_reference
+        ]
+        return f"ACC: {self.accession}. Ref:{references}. Features Count: {self.feature_set.count()}."
 
 
 class Feature(concept):
@@ -109,6 +112,7 @@ class DatabaseReference(concept):
         null=True, max_length=50, help_text="Original text of the reference"
     )
 
+
 class DatabaseFeatureReference(DatabaseReference):
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, null=True)
 
@@ -130,6 +134,7 @@ class SequenceHomology(models.Model):
     relation_sequence = models.ForeignKey(
         Sequence, related_name="related_sequences", on_delete=models.CASCADE
     )
+
 
 class FeatureHomology(models.Model):
     id = models.AutoField(primary_key=True)

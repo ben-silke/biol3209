@@ -12,60 +12,92 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('dnarecords', '0003_alter_sequencehomology_uuid'),
+        ("dnarecords", "0003_alter_sequencehomology_uuid"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CDS',
+            name="CDS",
             fields=[
-                ('uuid', models.UUIDField(default=uuid.uuid4, editable=False)),
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('other_data', models.JSONField(null=True)),
+                ("uuid", models.UUIDField(default=uuid.uuid4, editable=False)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("other_data", models.JSONField(null=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Gene',
+            name="Gene",
             fields=[
-                ('uuid', models.UUIDField(default=uuid.uuid4, editable=False)),
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(default='', max_length=256)),
-                ('interpro_id', models.CharField(default='', max_length=256)),
-                ('odb_cluster_id', models.CharField(max_length=256, null=True)),
-                ('other_data', models.JSONField(null=True)),
+                ("uuid", models.UUIDField(default=uuid.uuid4, editable=False)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(default="", max_length=256)),
+                ("interpro_id", models.CharField(default="", max_length=256)),
+                ("odb_cluster_id", models.CharField(max_length=256, null=True)),
+                ("other_data", models.JSONField(null=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='GeneDatabaseReference',
+            name="GeneDatabaseReference",
             fields=[
-                ('databasereference_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='dnarecords.databasereference')),
-                ('gene', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='gene.gene')),
+                (
+                    "databasereference_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="dnarecords.databasereference",
+                    ),
+                ),
+                (
+                    "gene",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="gene.gene"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('dnarecords.databasereference',),
+            bases=("dnarecords.databasereference",),
         ),
         migrations.CreateModel(
-            name='CdsDatabaseReference',
+            name="CdsDatabaseReference",
             fields=[
-                ('databasereference_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='dnarecords.databasereference')),
-                ('cds', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='gene.cds')),
+                (
+                    "databasereference_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="dnarecords.databasereference",
+                    ),
+                ),
+                (
+                    "cds",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="gene.cds"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('dnarecords.databasereference',),
+            bases=("dnarecords.databasereference",),
         ),
         migrations.AddField(
-            model_name='cds',
-            name='gene',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='gene.gene'),
+            model_name="cds",
+            name="gene",
+            field=models.ForeignKey(
+                null=True, on_delete=django.db.models.deletion.CASCADE, to="gene.gene"
+            ),
         ),
     ]

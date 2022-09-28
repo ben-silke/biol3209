@@ -1,4 +1,3 @@
-
 # read two files;
 
 # compare the cds sequences
@@ -20,7 +19,7 @@ import os
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 
-os.chdir('../../')
+os.chdir("../../")
 import django
 
 
@@ -30,16 +29,18 @@ from parsers.faa_parser import ProdigalResultParser
 
 
 print(os.listdir())
-directory = 'testing/data/'
-location = 'output/prodigal/'
-id = 'NC_000913'
+directory = "testing/data/"
+location = "output/prodigal/"
+id = "NC_000913"
 
-mrna_ext = '.mrna.faa'
-gbk_ext = '.coords.gbk'
+mrna_ext = ".mrna.faa"
+gbk_ext = ".coords.gbk"
 
-mrna_file = directory+location+id+'/'+id+mrna_ext
-print(f'{mrna_file=}')
-print('/home/ben/research/biol3209/testing/data/output/prodigal/NC_000913/NC_000913.mrna.faa')
+mrna_file = directory + location + id + "/" + id + mrna_ext
+print(f"{mrna_file=}")
+print(
+    "/home/ben/research/biol3209/testing/data/output/prodigal/NC_000913/NC_000913.mrna.faa"
+)
 with open(mrna_file) as file:
     parser = ProdigalResultParser(file)
     prodigal_genes = parser.run()

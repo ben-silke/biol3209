@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dnarecords', '0003_alter_sequencehomology_uuid'),
+        ("dnarecords", "0003_alter_sequencehomology_uuid"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='sequencehomology',
-            name='uuid',
-            field=models.UUIDField(default=uuid.UUID('11f8c651-ce69-4844-b9bc-050155c5f2af')),
+            model_name="sequencehomology",
+            name="uuid",
+            field=models.UUIDField(
+                default=uuid.UUID("11f8c651-ce69-4844-b9bc-050155c5f2af")
+            ),
         ),
     ]
