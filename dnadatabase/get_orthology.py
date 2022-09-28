@@ -1,10 +1,17 @@
 import os
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 import django
+
+
 django.setup()
 
-from gene.models import CdsDatabaseReference, Gene, GeneDatabaseReference, CDS
 import requests
+
+from gene.models import CDS, CdsDatabaseReference, Gene, GeneDatabaseReference
+
+
 # some thing like
 
 # for gene in gene names:

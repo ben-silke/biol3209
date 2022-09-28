@@ -1,5 +1,7 @@
-from cogent3.parse.fasta import MinimalFastaParser
 import gff3_parser
+
+from cogent3.parse.fasta import MinimalFastaParser
+
 
 class ProdigalResultParser:
 

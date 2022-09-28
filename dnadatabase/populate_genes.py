@@ -1,15 +1,19 @@
 import os
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 import django
+
+
 django.setup()
 
-from dnarecords.models import Database
-from gene.models import CdsDatabaseReference, Gene, GeneDatabaseReference, CDS
-
-import click
 import csv
 
+import click
+
 from cogent3.parse.genbank import MinimalGenbankParser
+from dnarecords.models import Database
+from gene.models import CDS, CdsDatabaseReference, Gene, GeneDatabaseReference
 
 
 @click.command()

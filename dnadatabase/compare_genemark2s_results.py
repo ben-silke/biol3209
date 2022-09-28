@@ -15,17 +15,23 @@
 # what scores should be used? what assertion of success is there?
 
 import os
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 
 
 import django
 
+
 django.setup()
-from gene.models import Gene
 # src/genetifinder/parsers
 import csv
-from gene.utils import GffParser
+
 from django.db.models import Q
+from gene.models import Gene
+from gene.utils import GffParser
+
+
 os.chdir('../')
 print(os.listdir())
 id = 'NC_000913'

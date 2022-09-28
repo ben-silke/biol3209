@@ -16,16 +16,21 @@
 # what scores should be used? what assertion of success is there?
 
 import os
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 
 
 import django
 
+
 django.setup()
+import csv
+
 from gene.models import Gene
 # src/genetifinder/parsers
 from gene.utils import ProdigalResultParser
-import csv
+
 
 os.chdir('../')
 print(os.listdir())

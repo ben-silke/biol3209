@@ -1,8 +1,11 @@
-from django.db import models
-from dnarecords.utils import get_interpro_info
-from dnarecords.models import DatabaseReference
-from dnarecords.model_utils import concept
 import requests
+
+from django.db import models
+from dnarecords.model_utils import concept
+from dnarecords.models import DatabaseReference
+from dnarecords.utils import get_interpro_info
+
+
 BASE_KEGG = 'https://rest.kegg.jp/'
 # Create your models here.
 GET = 'get/'

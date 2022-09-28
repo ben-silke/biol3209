@@ -1,15 +1,22 @@
 import os
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 import django
+
+
 django.setup()
 import csv
+
+
 print(os.listdir())
 os.chdir('../')
 print(os.listdir())
 
 folder = 'data/summary_stats'
 
-from gene.models import CDS, Gene, CdsDatabaseReference
+from gene.models import CDS, CdsDatabaseReference, Gene
+
 
 # counts_file = folder+'/cds_counts_stats.csv'
 # with open(counts_file, 'w') as f:

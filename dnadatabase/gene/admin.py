@@ -1,8 +1,10 @@
 from django.contrib import admin
 
+from . import models as gene
+
+
 # Register your models here.
 
-from . import models as gene
 
 
 # Register your models here.

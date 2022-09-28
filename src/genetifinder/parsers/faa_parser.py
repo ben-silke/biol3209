@@ -1,5 +1,6 @@
 from cogent3.parse.fasta import MinimalFastaParser
 
+
 class ProdigalResultParser:
 
     def __init__(self, open_file) -> None:

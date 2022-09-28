@@ -1,6 +1,10 @@
 import os
+
+
 os.chdir('../../')
 from parsers.faa_parser import ProdigalResultParser
+
+
 print(os.listdir())
 directory = 'testing/data/'
 location = 'output/prodigal/'

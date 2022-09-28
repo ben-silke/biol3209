@@ -16,14 +16,18 @@
 # what scores should be used? what assertion of success is there?
 
 import os
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 
 os.chdir('../../')
 import django
 
+
 django.setup()
-from parsers.faa_parser import ProdigalResultParser
 from gene.models import Gene
+from parsers.faa_parser import ProdigalResultParser
+
 
 print(os.listdir())
 directory = 'testing/data/'
