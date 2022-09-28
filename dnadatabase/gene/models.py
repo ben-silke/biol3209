@@ -1,51 +1,58 @@
-from django.db import models
-from dnarecords.utils import get_interpro_info
-from dnarecords.models import DatabaseReference
-from dnarecords.model_utils import concept
 import requests
-BASE_KEGG = 'https://rest.kegg.jp/'
+
+from django.db import models
+from dnarecords.model_utils import concept
+from dnarecords.models import DatabaseReference
+from dnarecords.utils import get_interpro_info
+
+
+BASE_KEGG = "https://rest.kegg.jp/"
 # Create your models here.
-GET = 'get/'
-CONVERT = 'conv/genes/'
+GET = "get/"
+CONVERT = "conv/genes/"
 
 
 class KeggConnectionMixin:
-
     def kegg_link(self):
         response = None
-        if gene_id := self.database_set.filter(database__name='GeneID').first():
-            print(f'{gene_id=} ; {gene_id.db_xref=} ; {gene_id.database.name=}')
-            url = BASE_KEGG+CONVERT+'ncbi-geneid:'+gene_id.db_xref
+        if gene_id := self.database_set.filter(database__name="GeneID").first():
+            print(f"{gene_id=} ; {gene_id.db_xref=} ; {gene_id.database.name=}")
+            url = BASE_KEGG + CONVERT + "ncbi-geneid:" + gene_id.db_xref
             print(url)
             try:
                 response = requests.get(url)
             except:
                 response = None
 
-        if response and response.text == '\n':
+        if response and response.text == "\n":
             response = None
-            if uniprot := self.database_set.filter(database__name='UniProtKB/Swiss-Prot').first():
-                print(f'{uniprot=} ; {uniprot.db_xref=} ; {uniprot.database.name=}')
+            if uniprot := self.database_set.filter(
+                database__name="UniProtKB/Swiss-Prot"
+            ).first():
+                print(f"{uniprot=} ; {uniprot.db_xref=} ; {uniprot.database.name=}")
 
-                print(f'{uniprot=}')
+                print(f"{uniprot=}")
                 try:
-                    response = requests.get(BASE_KEGG+CONVERT+'uniprot:'+uniprot.db_xref)
+                    response = requests.get(
+                        BASE_KEGG + CONVERT + "uniprot:" + uniprot.db_xref
+                    )
                 except:
                     response = None
 
         if response:
-            print(f'{response.text=}')
+            print(f"{response.text=}")
         if response and response.status_code == 200:
             try:
-                kegg_id = response.text.split('\n')[0].split('\t')[1]
+                kegg_id = response.text.split("\n")[0].split("\t")[1]
                 self.kegg_id = kegg_id
                 self.save()
 
-                response = requests.get(BASE_KEGG+GET+kegg_id)
+                response = requests.get(BASE_KEGG + GET + kegg_id)
                 if response.status_code == 200:
                     return response.text
             except Exception as e:
-                print(f'Exception {e} resulted in failure. {response.text=}')
+                print(f"Exception {e} resulted in failure. {response.text=}")
+
 
 class Gene(concept, KeggConnectionMixin):
     name = models.CharField(default="", max_length=256)
@@ -56,6 +63,10 @@ class Gene(concept, KeggConnectionMixin):
     other_data = models.JSONField(null=True)
     kegg_id = models.CharField(null=True, max_length=64)
 
+    locus = models.CharField(null=True, max_length=64)
+    raw_location = models.CharField(null=True, max_length=256)
+    first_base = models.IntegerField(null=True)
+    last_base = models.IntegerField(null=True)
 
     @property
     def database_set(self):
@@ -72,7 +83,9 @@ class Gene(concept, KeggConnectionMixin):
         else:
             self.kegg_link()
             if not self.kegg_id:
-                raise ValueError(f'Database reference does not have an associated link in kegg db.')
+                raise ValueError(
+                    f"Database reference does not have an associated link in kegg db."
+                )
             return self.kegg_id
 
 
@@ -81,6 +94,7 @@ class GeneDatabaseReference(DatabaseReference):
 
 
 class CDS(concept, KeggConnectionMixin):
+    locus = models.CharField(null=True, max_length=64)
     name = models.CharField(default="", max_length=256)
     gene = models.ForeignKey(Gene, on_delete=models.CASCADE, null=True)
 
@@ -89,7 +103,7 @@ class CDS(concept, KeggConnectionMixin):
     protein_id = models.CharField(null=True, max_length=64)
     translation = models.TextField(null=True, max_length=500)
     kegg_id = models.CharField(null=True, max_length=64)
-
+    raw_location = models.CharField(null=True, max_length=256)
 
     @property
     def database_set(self):

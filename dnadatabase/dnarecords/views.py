@@ -5,6 +5,7 @@ from typing import Any
 
 from django.http import HttpResponse
 from django.shortcuts import render
+
 # Create your views here.
 from django.views.generic import DetailView, ListView, TemplateView
 
@@ -50,6 +51,7 @@ class TaxonomyListView(ListView):
     template_name = "dnarecords/taxonomy_list.html"
     model = models.Taxonomy
 
+
 class EnvironmentListView(ListView):
-    template_name = 'dnarecords/environment_list.html'
+    template_name = "dnarecords/environment_list.html"
     model = models.Environment

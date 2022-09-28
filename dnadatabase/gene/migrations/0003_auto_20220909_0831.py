@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('gene', '0002_cds_name'),
+        ("gene", "0002_cds_name"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cds',
-            name='product',
+            model_name="cds",
+            name="product",
             field=models.CharField(max_length=256, null=True),
         ),
         migrations.AddField(
-            model_name='cds',
-            name='protein_id',
+            model_name="cds",
+            name="protein_id",
             field=models.CharField(max_length=64, null=True),
         ),
         migrations.AddField(
-            model_name='cds',
-            name='translation',
+            model_name="cds",
+            name="translation",
             field=models.TextField(max_length=500, null=True),
         ),
         migrations.AddField(
-            model_name='gene',
-            name='kegg_id',
+            model_name="gene",
+            name="kegg_id",
             field=models.CharField(max_length=64, null=True),
         ),
     ]

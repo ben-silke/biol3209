@@ -1,15 +1,22 @@
 import os
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 import django
+
+
 django.setup()
 import csv
+
+
 print(os.listdir())
-os.chdir('../')
+os.chdir("../")
 print(os.listdir())
 
-folder = 'data/summary_stats'
+folder = "data/summary_stats"
 
-from gene.models import CDS, Gene, CdsDatabaseReference
+from gene.models import CDS, CdsDatabaseReference, Gene
+
 
 # counts_file = folder+'/cds_counts_stats.csv'
 # with open(counts_file, 'w') as f:
@@ -89,10 +96,12 @@ from gene.models import CDS, Gene, CdsDatabaseReference
 #     gene.save()
 
 ls = []
-counts_file = folder+'/cds_kegg_links.csv'
-with open(counts_file, 'w') as f:
+counts_file = folder + "/cds_kegg_links.csv"
+with open(counts_file, "w") as f:
     writer = csv.writer(f)
-    for i, ref in enumerate(CdsDatabaseReference.objects.filter(database__name='UniProtKB/Swiss-Prot')):
+    for i, ref in enumerate(
+        CdsDatabaseReference.objects.filter(database__name="UniProtKB/Swiss-Prot")
+    ):
         cds = ref.cds
         output = cds.kegg_link()
         row = [cds.name]
@@ -101,5 +110,5 @@ with open(counts_file, 'w') as f:
                 row.append(cds.kegg_id)
             row.append(output)
         ls.append(row)
-        print(f'{i}- {cds.name}')
+        print(f"{i}- {cds.name}")
         writer.writerow(row)
