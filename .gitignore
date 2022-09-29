@@ -130,8 +130,8 @@ dmypy.json
 
 # keep the contents of data fies local but i want the folder framework to remain intact
 # data/
+data/soil
 data/soil/soil_reference_genomes
-data/soil/
 data/quest4orthologs
 testing/data/input
 testing/data/output

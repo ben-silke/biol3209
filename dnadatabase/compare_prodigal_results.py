@@ -15,14 +15,9 @@
 # what scores should be used? what assertion of success is there?
 
 import os
-
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 
-
 import django
-
-
 django.setup()
 import csv
 
@@ -56,16 +51,6 @@ def run_file(id):
         total = len(prodigal_genes) - 1
         rows = []
         correct = 0
-        rows.append(
-            [
-                "Gene name (prodigal)",
-                "Annotated Gene Name",
-                "Start",
-                "End",
-                "Equal",
-                "Raw Location",
-            ]
-        )
         for i, gene in enumerate(prodigal_genes):
             row = [gene.get("name")]
             # print(gene)
@@ -96,6 +81,14 @@ def run_file(id):
             rows.append(row)
 
     print(f"{correct=}/{total}")
+    rows = [
+        "Gene name (prodigal)",
+        "Annotated Gene Name",
+        "Start",
+        "End",
+        "Equal",
+        "Raw Location",
+    ] + ['correct', total, 'total', total] + rows
 
     with open(f"testing/results/prodigal/{id}_prodigal_test.csv", "w") as f:
         writer = csv.writer(f)
@@ -108,7 +101,7 @@ def run_file(id):
 
 
 def run_files(directory):
-    files = [file.replace(".gb", "").split(".")[0] for file in os.listdir(directory)]
+    files = [file.replace(".gb", "") for file in os.listdir(directory)]
     print(files)
 
     output = []
@@ -120,6 +113,8 @@ def run_files(directory):
         except:
             output.append(["FAIL", file])
 
-        with open("testing/results/genemark_overall.csv", "w") as f:
+        with open("testing/results/prodigal_overall.csv", "w") as f:
             writer = csv.writer(f)
             writer.writerows(output)
+
+run_files('data/soil/soil_reference_genomes')

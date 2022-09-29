@@ -27,6 +27,8 @@ do
     # double chekc these labels
         echo "files are equal"
     else
+        echo $file
+        echo $file__two
         # python3 $just_ortho_dir -q $folder/$file -s $folder/$file_two -o testing/data/output/justorthologs/orthologs.$file.$file_two.txt -c -t 16
         strace -o testing/data/output/justorthologs/trace_data/$file.$file_two.txt -c -tt python3 $just_ortho_dir -q $folder/$file$ext -s $folder/$file_two$ext -o testing/data/output/justorthologs/orthologs.$file.$file_two.txt -c -t 16
     fi
