@@ -136,6 +136,9 @@ data/quest4orthologs
 testing/data/input
 testing/data/output
 
+testing/results/genemark
+testing/results/prodigal
+
 # genemark 2s produces these files which I do not want to record
 *.out
 

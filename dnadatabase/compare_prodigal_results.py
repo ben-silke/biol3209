@@ -31,7 +31,7 @@ os.chdir("../")
 print(os.listdir())
 
 
-def run_file(id):
+def run_file(id, iteration, all_file_count):
     directory = "testing/data/"
     location = "output/prodigal/"
 
@@ -58,7 +58,8 @@ def run_file(id):
             print(type(first))
             last = int(gene.get("end"))
             sequence = gene.get("sequence")
-            print(f'Parsing {gene.get("name")}- {i}/{total}: {first}..{last}')
+            print(
+                f'Parsing {gene.get("name")} - {iteration}//{all_file_count}.{i}/{total}: {first}..{last}')
             matches = annotated_genes.filter(first_base=first)
             correct_match = False
             for match in matches:
@@ -80,19 +81,27 @@ def run_file(id):
                 correct += 1
             rows.append(row)
 
+            print(f'{row=}')
+            print(f'{len(rows)=}')
     print(f"{correct=}/{total}")
-    rows = [
+    all_rows = []
+
+    titles = [
         "Gene name (prodigal)",
         "Annotated Gene Name",
         "Start",
         "End",
         "Equal",
         "Raw Location",
-    ] + ['correct', total, 'total', total] + rows
+    ]
+    all_rows.append(titles)
+    all_rows.append(['correct', total, 'total', total])
+    all_rows.extend(rows)
+    # rows = all_rows
 
     with open(f"testing/results/prodigal/{id}_prodigal_test.csv", "w") as f:
         writer = csv.writer(f)
-        writer.writerows(rows)
+        writer.writerows(all_rows)
 
     return id, correct, total, gene_count
 
@@ -103,18 +112,25 @@ def run_file(id):
 def run_files(directory):
     files = [file.replace(".gb", "") for file in os.listdir(directory)]
     print(files)
+    # files = [
+    #     'NC_000913.3'
+    # ]
 
     output = []
     output.append(["id", "correct", "total", "gene_count"])
-    for file in files:
+    all_file_count = len(files)
+    print(all_file_count)
+    for iteration, file in enumerate(files):
         try:
-            id, correct, total, gene_count = run_file(file)
+            id, correct, total, gene_count = run_file(file, iteration, all_file_count)
             output.append([id, correct, total, gene_count])
-        except:
-            output.append(["FAIL", file])
+        except Exception as e:
+            print('________________________________________________failure______________________________')
+            print(file, e)
+            output.append(["FAIL", file, e])
 
-        with open("testing/results/prodigal_overall.csv", "w") as f:
-            writer = csv.writer(f)
-            writer.writerows(output)
+    with open("testing/results/prodigal_overall.csv", "w") as f:
+        writer = csv.writer(f)
+        writer.writerows(output)
 
 run_files('data/soil/soil_reference_genomes')

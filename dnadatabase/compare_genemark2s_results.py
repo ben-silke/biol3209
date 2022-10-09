@@ -30,13 +30,11 @@ from django.db.models import Q
 from gene.models import Gene
 from gene.utils import GffParser
 
-
 os.chdir("../")
 print(os.listdir())
-id = "NC_000913"
 
 
-def run_file(id):
+def run_file(id, iteration, all_file_count):
     directory = "testing/data/"
     location = "output/genemark/"
 
@@ -52,7 +50,7 @@ def run_file(id):
         metadata = parser.metadata
 
     rows = []
-    rows.append(metadata)
+    # rows.append(metadata)
     rows.append(
         [
             "Gene name (genemark)",
@@ -68,7 +66,7 @@ def run_file(id):
     success = 0
     total = len(genes)
     for i, gene in enumerate(genes):
-        print(f'{i}/{total} - {gene.get("gene_id")}')
+        print(f'{iteration}/{all_file_count}.{i}/{total} - {gene.get("gene_id")}')
         if "." in id:
             # locus is not stored with the decimal point
             id = id.split(".")[0]
@@ -106,11 +104,23 @@ def run_file(id):
 
         rows.append(row)
 
+    all_rows = []
+    all_rows.append([
+        'correct',
+        success,
+        'total',
+        total
+    ])
+
+    all_rows.extend(rows)
+    # rows = all_rows
+
     print(f"{success=}/{total=}")
 
     with open(f"testing/results/genemark/{id}_genemark_test.csv", "w") as f:
         writer = csv.writer(f)
-        writer.writerows(rows)
+        print(f'{type(all_rows)=}')
+        writer.writerows(all_rows)
 
     return id, success, total, gene_count
 
@@ -122,18 +132,25 @@ directory = "data/soil/soil_reference_genomes"
 
 
 def run_files(directory):
-    files = [file.replace(".gb", "").split(".")[0] for file in os.listdir(directory)]
+    files = [file.replace(".gb", "") for file in os.listdir(directory)]
+    # files = [
+    #     'NC_000913.3'
+    # ]
+    all_file_count = len(files)
     print(files)
 
     output = []
     output.append(["id", "correct", "total", "gene_count"])
-    for file in files:
-        try:
-            id, correct, total, gene_count = run_file(file)
-            output.append([id, correct, total, gene_count])
-        except:
-            output.append(["FAIL", file])
+    for iteration, file in enumerate(files):
+        # try:
+        id, correct, total, gene_count = run_file(file, iteration, all_file_count)
+        output.append([id, correct, total, gene_count])
+        # except Exception as e?:
+            # output.append(["FAIL", file, e])
 
     with open("testing/results/genemark_overall.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerows(output)
+
+
+run_files('data/soil/soil_reference_genomes')
