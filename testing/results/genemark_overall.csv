@@ -1,2 +1,2 @@
 id,correct,total,gene_count
-FAIL,NC_000913.3,"iterable expected, not int"
+NC_005824,31,281,36

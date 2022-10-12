@@ -49,41 +49,41 @@ annotated_genes = Gene.objects.filter(locus=id)
 total = len(prodigal_genes) - 1
 rows = []
 correct = 0
-# rows.append(['Gene name (prodigal)', 'Annotated Gene Name', 'Start', 'End', 'Equal', 'Raw Location'])
-# for i, gene in enumerate(prodigal_genes):
-#     row = [gene.get('name')]
-#     # print(gene)
-#     first = int(gene.get('start'))
-#     print(type(first))
-#     last = int(gene.get('end'))
-#     sequence = gene.get('sequence')
-#     print(f'Parsing {gene.get("name")}- {i}/{total}: {first}..{last}')
-#     matches = annotated_genes.filter(first_base=first)
-#     correct_match = False
-#     for match in matches:
-#         row.append(match.name)
-#         if match.first_base == first and match.last_base == last:
-#             correct_match = True
-#         row.extend([
-#             first,
-#             last,
-#             correct_match,
-#             match.raw_location,
-#             ])
-#     if not matches:
-#         row.extend([
-#             first,
-#             last,
-#             "failure",
-#             'No match found'
-#         ])
+rows.append(['Gene name (genemark)', 'Annotated Gene Name', 'Start', 'End', 'Equal', 'Raw Location'])
+for i, gene in enumerate(prodigal_genes):
+    row = [gene.get('name')]
+    # print(gene)
+    first = int(gene.get('start'))
+    print(type(first))
+    last = int(gene.get('end'))
+    sequence = gene.get('sequence')
+    print(f'Parsing {gene.get("name")}- {i}/{total}: {first}..{last}')
+    matches = annotated_genes.filter(first_base=first)
+    correct_match = False
+    for match in matches:
+        row.append(match.name)
+        if match.first_base == first and match.last_base == last:
+            correct_match = True
+        row.extend([
+            first,
+            last,
+            correct_match,
+            match.raw_location,
+            ])
+    if not matches:
+        row.extend([
+            first,
+            last,
+            "failure",
+            'No match found'
+        ])
 
-#     if correct_match:
-#         correct += 1
-#     rows.append(row)
+    if correct_match:
+        correct += 1
+    rows.append(row)
 
 print(f"{correct=}")
-with open("testing/results/prodigal_test.csv", "w") as f:
+with open("testing/results/gene_mark.csv", "w") as f:
     writer = csv.writer(f)
     writer.writerows(rows)
 

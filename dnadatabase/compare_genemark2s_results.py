@@ -29,6 +29,7 @@ import csv
 from django.db.models import Q
 from gene.models import Gene
 from gene.utils import GffParser
+import click
 
 os.chdir("../")
 print(os.listdir())
@@ -133,9 +134,10 @@ directory = "data/soil/soil_reference_genomes"
 
 def run_files(directory):
     files = [file.replace(".gb", "") for file in os.listdir(directory)]
-    # files = [
-    #     'NC_000913.3'
-    # ]
+    files = [
+        # 'NC_000913.3',
+        'NC_014623.1'
+    ]
     all_file_count = len(files)
     print(files)
 
@@ -153,4 +155,38 @@ def run_files(directory):
         writer.writerows(output)
 
 
-run_files('data/soil/soil_reference_genomes')
+# run_files('data/soil/soil_reference_genomes')
+
+
+@click.command()
+@click.option('--files', '--f')
+def run(files):
+    if not type(files) == list:
+        files = [files]
+
+    all_file_count = len(files)
+    print(files)
+
+    output = []
+    output.append(["id", "correct", "total", "gene_count"])
+    for iteration, file in enumerate(files):
+        # try:
+        id, correct, total, gene_count = run_file(file, iteration, all_file_count)
+        output.append([id, correct, total, gene_count])
+        # except Exception as e?:
+            # output.append(["FAIL", file, e])
+
+    with open("testing/results/genemark_overall.csv", "w") as f:
+        writer = csv.writer(f)
+        writer.writerows(output)
+
+
+if __name__ == '__main__':
+    run()
+
+
+"""
+
+python3 compare_genemark2s_results.py --f
+
+"""
