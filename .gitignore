@@ -133,11 +133,13 @@ dmypy.json
 data/soil
 data/soil/soil_reference_genomes
 data/quest4orthologs
+data/fails
 testing/data/input
 testing/data/output
 
 testing/results/genemark
 testing/results/prodigal
+testing/results/prodigal_last
 
 # genemark 2s produces these files which I do not want to record
 *.out

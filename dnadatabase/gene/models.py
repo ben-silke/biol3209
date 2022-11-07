@@ -55,7 +55,7 @@ class KeggConnectionMixin:
 
 
 class Gene(concept, KeggConnectionMixin):
-    name = models.CharField(default="", max_length=256)
+    name = models.CharField(default="", max_length=256, null=True)
     interpro_id = models.CharField(default="", max_length=256)
 
     odb_cluster_id = models.CharField(null=True, max_length=256)
@@ -95,7 +95,7 @@ class GeneDatabaseReference(DatabaseReference):
 
 class CDS(concept, KeggConnectionMixin):
     locus = models.CharField(null=True, max_length=64)
-    name = models.CharField(default="", max_length=256)
+    name = models.CharField(default="", max_length=256, null=True)
     gene = models.ForeignKey(Gene, on_delete=models.CASCADE, null=True)
 
     other_data = models.JSONField(null=True)

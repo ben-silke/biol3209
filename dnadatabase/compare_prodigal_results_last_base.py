@@ -60,12 +60,11 @@ def run_file(id, iteration, all_file_count):
             sequence = gene.get("sequence")
             print(
                 f'Parsing {gene.get("name")} - {iteration}//{all_file_count}.{i}/{total}: {first}..{last}')
-            matches = annotated_genes.filter(first_base=first)
+            matches = annotated_genes.filter(last_base=last)
             correct_match = False
             for match in matches:
                 row.append(match.name)
-                if match.first_base == first and match.last_base == last:
-                    correct_match = True
+                correct_match=True
                 row.extend(
                     [
                         first,
@@ -91,15 +90,15 @@ def run_file(id, iteration, all_file_count):
         "Annotated Gene Name",
         "Start",
         "End",
-        "Equal",
+        "Last Base Match",
         "Raw Location",
     ]
     all_rows.append(titles)
-    all_rows.append(['correct', correct, 'total', total, 'gene_count', gene_count])
+    all_rows.append(['correct', total, 'total', total])
     all_rows.extend(rows)
     # rows = all_rows
 
-    with open(f"testing/results/prodigal/{id}_prodigal_test.csv", "w") as f:
+    with open(f"testing/results/prodigal_last/{id}_prodigal_test_last_match.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerows(all_rows)
 
