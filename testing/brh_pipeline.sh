@@ -10,11 +10,10 @@ files=(UP000002524_243230 UP000000577_243231 UP000000429_85962 UP000000557_25122
 
 # change this depending on the input
 folder=data/quest4orthologs/Bacteria
-just_ortho_dir=/home/ben/research/notJustOrthologs/JustOrthologs-master/justOrthologs.py
 
 ext=_DNA.fasta
 cd ../
-ls
+eval ls
 mkdir testing/data/output/rbhs
 mkdir testing/data/output/rbh_intermediate
 
@@ -28,12 +27,15 @@ do
     # double chekc these labels
         echo "files are equal"
     else
-        echo $file
-        echo $file_two
-        bash run_blast.sh $folder/$file $folder/$file_two testing/data/output/rbh_intermediate/$file.$file_two
-        bash find_rbh_blast.sh testing/data/output/rbh_intermediate/$file.$file_two testing/data/output/rbhs/$file.$file_two
+        echo $file.$file_two
+        # eval ls
+
+        exec "run_blast.sh $folder/$file$ext $folder/$file_two$ext testing/data/output/rbh_intermediate/$file.$file_two"
+        exec "find_rbh_blast.sh testing/data/output/rbh_intermediate/$file.$file_two testing/data/output/rbhs/$file.$file_two"
+        break
     fi
     done
+    break
     # strace -o data/justorthologs/trace_data/$id.txt -c -tt ____command_goes_here____
     # python script to compare the sequences.
 done

@@ -10,16 +10,22 @@ inputDB="$2"
 outputPath="$3"
 #Move to DB directory
 
+echo Running run_blast.sh
+echo $inputQuery
+echo $inputDB
+# echo $3
+
 queryPath=$(dirname "$inputQuery")
+echo $queryPath
 cd “$queryPath”
 
 #Make blastable protein DB of the input query
-makeblastdb -in “$inputQuery” -dbtype prot
+makeblastdb -in “$inputQuery” -dbtype nucleotide
 #Move to query directory
 dbPath=$(dirname "$inputDB")
 cd “$dbPath”
 #Make blastable protein DB of the input DB
-makeblastdb -in “$inputDB” -dbtype prot
+makeblastdb -in “$inputDB” -dbtype nucleotide
 #Output start status message
 echo "Beginning reciprocal BLAST..."
 #Move to outputs folder

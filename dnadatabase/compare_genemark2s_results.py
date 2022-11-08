@@ -173,6 +173,7 @@ def run(files):
         # try:
         id, correct, total, gene_count = run_file(file, iteration, all_file_count)
         output.append([id, correct, total, gene_count])
+        print(output)
         # except Exception as e?:
             # output.append(["FAIL", file, e])
 
