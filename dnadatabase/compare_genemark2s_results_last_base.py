@@ -79,13 +79,14 @@ def run_file(id, iteration, all_file_count):
         last = gene.get("end")
         locus = gene.get("locus")
 
-        m = annotated_genes.filter(Q(first_base=first) | Q(last_base=last))
+        m = annotated_genes.filter(last_base=last)
         if m:
             for match in m:
                 row.append(match.name)
 
-                if match.first_base == first and match.last_base == last:
+                if match.last_base == last:
                     has_match = True
+
 
                 row.extend(
                     [
@@ -118,7 +119,7 @@ def run_file(id, iteration, all_file_count):
 
     print(f"{success=}/{total=}")
 
-    with open(f"testing/results/genemark/{id}_genemark_test.csv", "w") as f:
+    with open(f"testing/results/genemark_last/{id}_genemark_test_last_base.csv", "w") as f:
         writer = csv.writer(f)
         print(f'{type(all_rows)=}')
         writer.writerows(all_rows)
@@ -173,7 +174,6 @@ def run(files):
         # try:
         id, correct, total, gene_count = run_file(file, iteration, all_file_count)
         output.append([id, correct, total, gene_count])
-        print(output)
         # except Exception as e?:
             # output.append(["FAIL", file, e])
 

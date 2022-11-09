@@ -39,17 +39,18 @@ class GffParser:
     # However; at the moment this requires reading everything twice; plus a third when it is used
 
     def run(self):
-        self.lines = self.open_file.readlines()
+        # self.lines = self.open_file.readlines()
         i = 0
-        for line in self.lines:
+        line = self.open_file.readline()
+
+        while line:
+        # print(f'{self.lines}')
             i += 1
+            # print(f'{i=} | {line=}')
             if line[0] == "#":
                 self.metadata.append(line)
             else:
-                print(line)
                 data = line.split("\t")
-                print(data)
-                print(len(data))
                 if len(data) > 5:
                     gene = {
                         "locus": data[0],
@@ -66,5 +67,9 @@ class GffParser:
                         value = content[1].replace('"', "")
                         gene[content[0]] = value
                 self.genes.append(gene)
+                # print(f'{gene}')
 
+            line = self.open_file.readline()
+            if line == '\n' and i < 10:
+                line = self.open_file.readline()
         return self.genes
