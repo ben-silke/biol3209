@@ -31,7 +31,7 @@ from gene.models import Gene
 from gene.utils import GffParser
 import click
 
-os.chdir("../")
+os.chdir("../../")
 print(os.listdir())
 
 
@@ -119,7 +119,7 @@ def run_file(id, iteration, all_file_count):
 
     print(f"{success=}/{total=}")
 
-    with open(f"testing/results/genemark/{id}_genemark_test.csv", "w") as f:
+    with open(f"testing/results/genemark_last/{id}_genemark_test_last_base.csv", "w") as f:
         writer = csv.writer(f)
         print(f'{type(all_rows)=}')
         writer.writerows(all_rows)

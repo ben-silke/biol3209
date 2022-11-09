@@ -27,7 +27,7 @@ from gene.models import Gene
 from gene.utils import ProdigalResultParser
 
 
-os.chdir("../")
+os.chdir("../../")
 print(os.listdir())
 
 

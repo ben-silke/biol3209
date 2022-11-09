@@ -31,7 +31,7 @@ from gene.models import Gene
 from gene.utils import GffParser
 import click
 
-os.chdir("../")
+os.chdir("../../")
 print(os.listdir())
 
 

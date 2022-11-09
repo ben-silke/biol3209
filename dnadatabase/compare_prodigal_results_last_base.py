@@ -14,6 +14,7 @@
 
 # what scores should be used? what assertion of success is there?
 
+import click
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dnadatabase.settings")
 
@@ -27,7 +28,7 @@ from gene.models import Gene
 from gene.utils import ProdigalResultParser
 
 
-os.chdir("../")
+os.chdir("../../")
 print(os.listdir())
 
 
@@ -132,4 +133,36 @@ def run_files(directory):
         writer = csv.writer(f)
         writer.writerows(output)
 
-run_files('data/soil/soil_reference_genomes')
+# run_files('data/soil/soil_reference_genomes')
+
+
+@click.command()
+@click.option('--files', '--f')
+def run(files):
+    if not type(files) == list:
+        files = [files]
+    # files = [file.replace(".gb", "") for file in os.listdir(directory)]
+    print(files)
+    # files = [
+    #     'NC_000913.3'
+    # ]
+
+    output = []
+    output.append(["id", "correct", "total", "gene_count"])
+    all_file_count = len(files)
+    print(all_file_count)
+    for iteration, file in enumerate(files):
+        try:
+            id, correct, total, gene_count = run_file(
+                file, iteration, all_file_count)
+            output.append([id, correct, total, gene_count])
+            print(output)
+        except Exception as e:
+            print(
+                '________________________________________________failure______________________________')
+            print(file, e)
+            output.append(["FAIL", file, e])
+
+
+if __name__ == '__main__':
+    run()
