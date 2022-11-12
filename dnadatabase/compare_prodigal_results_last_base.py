@@ -95,7 +95,7 @@ def run_file(id, iteration, all_file_count):
         "Raw Location",
     ]
     all_rows.append(titles)
-    all_rows.append(['correct', total, 'total', total])
+    all_rows.append(['correct', total, 'total', correct])
     all_rows.extend(rows)
     # rows = all_rows
 
