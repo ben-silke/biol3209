@@ -146,6 +146,8 @@ testing/results/
 # genemark 2s produces these files which I do not want to record
 *.out
 
+*.png
+
 
 .DS_Store
 
