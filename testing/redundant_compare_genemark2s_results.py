@@ -47,9 +47,17 @@ genes = gff3_parser.parse_gff3(gff_file, verbose=True, parse_attributes=True)
 print(genes)
 annotated_genes = Gene.objects.filter(locus=id)
 total = len(prodigal_genes) - 1
-rows = []
 correct = 0
-rows.append(['Gene name (genemark)', 'Annotated Gene Name', 'Start', 'End', 'Equal', 'Raw Location'])
+rows = [
+    [
+        'Gene name (genemark)',
+        'Annotated Gene Name',
+        'Start',
+        'End',
+        'Equal',
+        'Raw Location',
+    ]
+]
 for i, gene in enumerate(prodigal_genes):
     row = [gene.get('name')]
     # print(gene)

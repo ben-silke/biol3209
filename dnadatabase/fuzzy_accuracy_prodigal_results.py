@@ -16,13 +16,12 @@ print(os.listdir())
 import numpy as np
 
 def run_file(id, iteration, all_file_count):
-    directory = "testing/data/"
     location = "output/prodigal/"
 
     mrna_ext = ".mrna.faa"
     gbk_ext = ".coords.gbk"
 
-    mrna_file = directory + location + id + "/" + id + mrna_ext
+    mrna_file = f"testing/data/{location}{id}/{id}{mrna_ext}"
     print(f"{mrna_file=}")
     with open(mrna_file) as file:
         parser = ProdigalResultParser(file)
@@ -65,8 +64,6 @@ def run_file(id, iteration, all_file_count):
                 rows.append(row)
             if not matches:
                 row.extend([first, last, "failure", "No match found"])
-    all_rows = []
-
     titles = [
         "Gene name (prodigal)",
         "Annotated Gene Name",
@@ -75,10 +72,11 @@ def run_file(id, iteration, all_file_count):
         "Equal",
         "Raw Location",
     ]
-    all_rows.append(titles)
-    all_rows.append(['correct', correct, 'total', total, 'gene_count', gene_count])
-    all_rows.extend(rows)
-
+    all_rows = [
+        titles,
+        ['correct', correct, 'total', total, 'gene_count', gene_count],
+        *rows,
+    ]
     with open(f"testing/results/prodigal/fuzzy/{id}_prodigal_test.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerows(all_rows)
@@ -99,8 +97,7 @@ def run_files(directory):
     #     'NC_000913.3'
     # ]
 
-    output = []
-    output.append(["id", "correct", "total", "gene_count"])
+    output = [["id", "correct", "total", "gene_count"]]
     all_file_count = len(files)
     print(all_file_count)
     for iteration, file in enumerate(files):

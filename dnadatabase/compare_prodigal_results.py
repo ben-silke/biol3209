@@ -32,13 +32,12 @@ print(os.listdir())
 
 
 def run_file(id, iteration, all_file_count):
-    directory = "testing/data/"
     location = "output/prodigal/"
 
     mrna_ext = ".mrna.faa"
     gbk_ext = ".coords.gbk"
 
-    mrna_file = directory + location + id + "/" + id + mrna_ext
+    mrna_file = f"testing/data/{location}{id}/{id}{mrna_ext}"
     print(f"{mrna_file=}")
     with open(mrna_file) as file:
         parser = ProdigalResultParser(file)
@@ -84,8 +83,6 @@ def run_file(id, iteration, all_file_count):
             print(f'{row=}')
             print(f'{len(rows)=}')
     print(f"{correct=}/{total}")
-    all_rows = []
-
     titles = [
         "Gene name (prodigal)",
         "Annotated Gene Name",
@@ -94,9 +91,11 @@ def run_file(id, iteration, all_file_count):
         "Equal",
         "Raw Location",
     ]
-    all_rows.append(titles)
-    all_rows.append(['correct', correct, 'total', total, 'gene_count', gene_count])
-    all_rows.extend(rows)
+    all_rows = [
+        titles,
+        ['correct', correct, 'total', total, 'gene_count', gene_count],
+        *rows,
+    ]
     # rows = all_rows
 
     with open(f"testing/results/prodigal/{id}_prodigal_test.csv", "w") as f:
@@ -116,8 +115,7 @@ def run_files(directory):
     #     'NC_000913.3'
     # ]
 
-    output = []
-    output.append(["id", "correct", "total", "gene_count"])
+    output = [["id", "correct", "total", "gene_count"]]
     all_file_count = len(files)
     print(all_file_count)
     for iteration, file in enumerate(files):
@@ -137,7 +135,7 @@ import click
 @click.command()
 @click.option('--files', '--f')
 def run(files):
-    if not type(files) == list:
+    if type(files) != list:
         files = [files]
     # files = [file.replace(".gb", "") for file in os.listdir(directory)]
     print(files)
@@ -145,8 +143,7 @@ def run(files):
     #     'NC_000913.3'
     # ]
 
-    output = []
-    output.append(["id", "correct", "total", "gene_count"])
+    output = [["id", "correct", "total", "gene_count"]]
     all_file_count = len(files)
     print(all_file_count)
     for iteration, file in enumerate(files):

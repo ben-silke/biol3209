@@ -50,14 +50,12 @@ def get_references(db_name):
         accession = [reference.feature.sequence.accession for reference in references]
         acc = set(accession)
         for a in acc:
-            if not "NC_000964" in a:
+            if "NC_000964" not in a:
                 accs.append(a)
                 print(f"{i} -- {a=}")
         print(f"{i} -- {accs=}")
 
     raise ValueError(accs)
-    for ref in high_counts.keys():
-        get_sequence(ref)
 
 
 def get_sequence(db_xref):
@@ -76,9 +74,6 @@ def query_swiss_prot(db_xref):
     # https://rest.uniprot.org/uniprotkb/P12345.fasta
 
     references = DatabaseFeatureReference.objects.filter(db_xref=db_xref)
-    for reference in references:
-        # reference.
-        pass
 
 
 if __name__ == "__main__":

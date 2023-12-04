@@ -6,10 +6,9 @@ ORTHO_DB_ENDPOINT = url = "https://www.orthodb.org/"
 
 # search?query=3433707"
 def get_orthoDB_id(query):
-    type = "search"
     query = f"?query={query}"
 
-    response = requests.get(ORTHO_DB_ENDPOINT + type + query)
+    response = requests.get(f"{ORTHO_DB_ENDPOINT}search{query}")
     return response.json()["data"]
 
 
@@ -19,10 +18,9 @@ def get_orthologs_from_orthoDB(id):
     Returns the orthologs from OrthoDB using the OrthoDB id.
     id = OrthoDB cluster id
     """
-    type = "orthologs"
     query = f"?id={id}"
 
-    response = requests.get(ORTHO_DB_ENDPOINT + type + query)
+    response = requests.get(f"{ORTHO_DB_ENDPOINT}orthologs{query}")
     if response.json()["data"]:
         return response.json()["data"][0]["genes"]
 

@@ -41,12 +41,8 @@ def get_gene(name):
     genes = Gene.objects.filter(name=name)
     references = []
     for gene in genes:
-        for ref in GeneDatabaseReference.objects.filter(gene=gene):
-            references.append(ref)
-
-        for ref in gene.cds.database_set:
-            references.append(ref)
-
+        references.extend(iter(GeneDatabaseReference.objects.filter(gene=gene)))
+        references.extend(iter(gene.cds.database_set))
     return references
 
 
@@ -59,7 +55,7 @@ base = "https://www.ebi.ac.uk/interpro/api/"
 def get_interpro_info(query, id):
 
     response = requests.get(base + query + id)
-    if not response.status_code == 200:
+    if response.status_code != 200:
         return []
     if results := response.json().get("results", None):
         return results
@@ -68,16 +64,12 @@ def get_interpro_info(query, id):
 
 
 def get_ortho_db_set(id):
-    base = "https://www.orthodb.org/search?"
     query = f"query={id}&"
     tags = "ncbi=1"
-    response = requests.get(base + query + tags)
-    if not response.status_code == 200:
+    response = requests.get(f"https://www.orthodb.org/search?{query}{tags}")
+    if response.status_code != 200:
         return []
-    if results := response.json().get("data", []):
-        return results
-    else:
-        return []
+    return results if (results := response.json().get("data", [])) else []
 
 
 def check_endpoints(endpoints):

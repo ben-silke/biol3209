@@ -96,7 +96,7 @@ from gene.models import CDS, CdsDatabaseReference, Gene
 #     gene.save()
 
 ls = []
-counts_file = folder + "/cds_kegg_links.csv"
+counts_file = f"{folder}/cds_kegg_links.csv"
 with open(counts_file, "w") as f:
     writer = csv.writer(f)
     for i, ref in enumerate(
