@@ -36,12 +36,11 @@ print(os.listdir())
 
 
 def run_file(id, iteration, all_file_count):
-    directory = "testing/data/"
     location = "output/genemark/"
 
     gff_ext = ".genemark.txt"
 
-    gff_file = directory + location + id + "/" + id + gff_ext
+    gff_file = f"testing/data/{location}{id}/{id}{gff_ext}"
     print(f"{gff_file=}")
     # with open(gff_file) as file:
 
@@ -50,9 +49,7 @@ def run_file(id, iteration, all_file_count):
         genes = parser.run()
         metadata = parser.metadata
 
-    rows = []
-    # rows.append(metadata)
-    rows.append(
+    rows = [
         [
             "Gene name (genemark)",
             "Annotated Gene Name/ locus",
@@ -63,7 +60,7 @@ def run_file(id, iteration, all_file_count):
             "first_base",
             "last_base",
         ]
-    )
+    ]
     success = 0
     total = len(genes)
     for i, gene in enumerate(genes):
@@ -79,8 +76,7 @@ def run_file(id, iteration, all_file_count):
         last = gene.get("end")
         locus = gene.get("locus")
 
-        m = annotated_genes.filter(last_base=last)
-        if m:
+        if m := annotated_genes.filter(last_base=last):
             for match in m:
                 row.append(match.name)
 
@@ -106,15 +102,7 @@ def run_file(id, iteration, all_file_count):
 
         rows.append(row)
 
-    all_rows = []
-    all_rows.append([
-        'correct',
-        success,
-        'total',
-        total
-    ])
-
-    all_rows.extend(rows)
+    all_rows = [['correct', success, 'total', total], *rows]
     # rows = all_rows
 
     print(f"{success=}/{total=}")
@@ -142,8 +130,7 @@ def run_files(directory):
     all_file_count = len(files)
     print(files)
 
-    output = []
-    output.append(["id", "correct", "total", "gene_count"])
+    output = [["id", "correct", "total", "gene_count"]]
     for iteration, file in enumerate(files):
         # try:
         id, correct, total, gene_count = run_file(file, iteration, all_file_count)
@@ -162,14 +149,13 @@ def run_files(directory):
 @click.command()
 @click.option('--files', '--f')
 def run(files):
-    if not type(files) == list:
+    if type(files) != list:
         files = [files]
 
     all_file_count = len(files)
     print(files)
 
-    output = []
-    output.append(["id", "correct", "total", "gene_count"])
+    output = [["id", "correct", "total", "gene_count"]]
     for iteration, file in enumerate(files):
         # try:
         id, correct, total, gene_count = run_file(file, iteration, all_file_count)

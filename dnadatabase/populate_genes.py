@@ -49,7 +49,7 @@ def main(d, create=False, test=False, fail_file=None, output=""):
     fails = run(files)
     print("________________FAILS________________________")
     print(fails)
-    file = output + "gene_population_failures.csv"
+    file = f"{output}gene_population_failures.csv"
     with open(file) as f:
         writer = csv.writer()
 
@@ -68,8 +68,7 @@ def parse_file(file):
         print(f"Parsing {file}")
         with open(file) as f:
             parser = MinimalGenbankParser(f)
-            for p in parser:
-                genes.append(p)
+            genes.extend(iter(parser))
         # print(f'{genes=}')
 
         return genes
@@ -91,8 +90,7 @@ def run(files):
             writer = csv.writer(output_file)
             print(f"attemping to parse {i}/{total} -::- {file}")
             try:
-                genes = parse_file(file)
-                if genes:
+                if genes := parse_file(file):
                     f, rows = create_objects(genes)
                     writer.writerows(rows)
                     fails[str(file)] = f

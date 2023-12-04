@@ -57,8 +57,6 @@ def main(d, create=False, test=False, fail_file=None, environment=None):
         environment = Environment.objects.create(
             name="Soil Microbiome",
         )
-        pass
-
     print(d)
     if d:
         files = [
@@ -121,8 +119,7 @@ def run_file(file):
         print(f"Parsing {file}")
         with open(file) as f:
             parser = MinimalGenbankParser(f)
-            for p in parser:
-                genes.append(p)
+            genes.extend(iter(parser))
     except:
         print(f"Failed to parse {file}")
         return None
@@ -136,8 +133,7 @@ def run(files):
             print(f"Parsing {file}")
             with open(file) as f:
                 parser = MinimalGenbankParser(f)
-                for p in parser:
-                    genes.append(p)
+                genes.extend(iter(parser))
         except:
             print(f"Failed to parse {file}")
             continue
@@ -204,11 +200,9 @@ def create_database_objects(genes, environment):
             db = db.replace("DBLINK", "").strip()
             db_string = db.split(" ")
             databases = []
-            i = 0
-            while i < len(db_string):
+            for i in range(0, len(db_string), 2):
                 database = db_string[i]
                 location = db_string[i + 1]
-                i += 2
                 databases.append(
                     {
                         "database": database,
@@ -289,8 +283,7 @@ def create_database_objects(genes, environment):
         for tax in taxonomy:
             try:
                 print(tax)
-                list = Taxonomy.objects.filter(name=tax)
-                if list:
+                if list := Taxonomy.objects.filter(name=tax):
                     taxonomy_object = list[0]
                 else:
                     taxonomy_object = Taxonomy.objects.create(name=tax)
@@ -322,16 +315,13 @@ def user_input_name_and_description(object_name, name=None, description=None):
     name = input()
     print(f"are you happy with {name=} (y/n)")
     y = input()
-    if y == "y" or y == "Y":
-        print(f"please enter a description for the {object_name}")
-        description = input()
-        print(f"are you happy with {description=} (y/n)")
-        y = input()
-        if y != "y" or y != "Y":
-            description = None
-        return name, description
-    else:
+    if y not in ["y", "Y"]:
         return user_input_name_and_description(object_name)
+    print(f"please enter a description for the {object_name}")
+    description = input()
+    print(f"are you happy with {description=} (y/n)")
+    y = input()
+    return name, None
 
 
 if __name__ == "__main__":

@@ -17,9 +17,7 @@ for file in files:
     with open(file) as f:
         # parser = MinimalGenbankParser(f)
         parser = RichGenbankParser(f)
-        for p in parser:
-            genes.append(p)
-
+        genes.extend(iter(parser))
 gene = genes[0]
 print(gene)
 print(type(gene))

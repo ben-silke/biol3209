@@ -77,16 +77,13 @@ class Gene(concept, KeggConnectionMixin):
         return CDS.objects.filter(gene=self).first()
 
     def get_kegg_id(self):
-        if self.kegg_id:
-            return self.kegg_id
-
-        else:
+        if not self.kegg_id:
             self.kegg_link()
-            if not self.kegg_id:
-                raise ValueError(
-                    f"Database reference does not have an associated link in kegg db."
-                )
-            return self.kegg_id
+        if not self.kegg_id:
+            raise ValueError(
+                "Database reference does not have an associated link in kegg db."
+            )
+        return self.kegg_id
 
 
 class GeneDatabaseReference(DatabaseReference):

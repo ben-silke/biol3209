@@ -100,9 +100,8 @@ class GenbankParser:
         All relations are assumed 'to many', and order will be preserved.
         """
         print(f"{lines=}")
-        result = {}
         type_, data = cogent.block_consolidator(lines)
-        result["type"] = type_
+        result = {"type": type_}
         location = []
         found_feature = False
         for curr_line_idx, line in enumerate(data):
@@ -128,8 +127,7 @@ class GenbankParser:
             except ValueError:  # sometimes not delimited by =
                 label, first_line = first, ""
             # chop off leading quote if appropriate
-            if first_line.startswith('"'):
-                first_line = first_line[1:]
+            first_line = first_line.removeprefix('"')
             remainder = [first_line] + feature_component[1:]
             # chop off trailing quote, if appropriate
             last_line = remainder[-1].rstrip()
